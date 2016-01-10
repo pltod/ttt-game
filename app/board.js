@@ -144,11 +144,11 @@ var Board = React.createClass({
     var cards = this.getCards();
     var a1, a2;
     if (this.state.player1Turn) {
-      a1 = <Avatar color={Colors.deepOrange300} backgroundColor={Colors.purple500}>P1</Avatar>;
+      a1 = <Avatar color={Colors.amber100} backgroundColor={Colors.cyan500}>P1</Avatar>;
       a2 = <Avatar>P2</Avatar>;
     } else {
       a1 = <Avatar>P1</Avatar>;
-      a2 = <Avatar color={Colors.deepOrange300} backgroundColor={Colors.purple500}>P2</Avatar>;
+      a2 = <Avatar color={Colors.amber100} backgroundColor={Colors.cyan500}>P2</Avatar>;
     }
     return (
       <div className="board">
