@@ -1,0 +1,21 @@
+div.board {
+  bottom: 0;
+  height: 350px;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 350px;
+}
+.ReactFlipCard {
+  margin: 5px;
+}
+.ReactFlipCard,
+.ReactFlipCard__Front,
+.ReactFlipCard__Back {
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
+  outline:0;
+}

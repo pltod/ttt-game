@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Tic-Tac-Toe with React",
   "scripts": {
-    "build-dev": "watchify app/boot.js -o public/build.js",
+    "build-dev": "watchify app/boot.js -o public/build.js --debug --verbose",
     "build-prod": "browserify app/boot.js | uglifyjs > public/build.min.js",
     "test": "node app/test/main.js | colortape"
   },
@@ -23,11 +23,16 @@
   },
   "homepage": "https://github.com/pltod/ttt-game#readme",
   "dependencies": {
+    "material-ui": "^0.14.2",
     "react": "^0.14.6",
-    "react-dom": "^0.14.6"
+    "react-dom": "^0.14.6",
+    "react-flipcard": "^0.2.1",
+    "react-tap-event-plugin": "^0.2.1"
   },
   "browserify": {
     "transform": [
+      "node-lessify",
+      "cssify",
       [
         "babelify",
         {
@@ -44,6 +49,10 @@
     "babel-preset-react": "^6.3.13",
     "babelify": "^7.2.0",
     "browserify": "^13.0.0",
+    "colortape": "^0.1.1",
+    "cssify": "^1.0.2",
+    "node-lessify": "^0.1.1",
+    "tape": "^4.4.0",
     "uglifyjs": "^2.4.10",
     "watchify": "^3.7.0"
   }
