@@ -1,0 +1,50 @@
+{
+  "name": "ttt-game",
+  "version": "1.0.0",
+  "description": "Tic-Tac-Toe with React",
+  "scripts": {
+    "build-dev": "watchify app/boot.js -o public/build.js",
+    "build-prod": "browserify app/boot.js | uglifyjs > public/build.min.js",
+    "test": "node app/test/main.js | colortape"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pltod/ttt-game.git"
+  },
+  "keywords": [
+    "tic-tac-toe",
+    "game",
+    "react"
+  ],
+  "author": "@pltod",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pltod/ttt-game/issues"
+  },
+  "homepage": "https://github.com/pltod/ttt-game#readme",
+  "dependencies": {
+    "react": "^0.14.6",
+    "react-dom": "^0.14.6"
+  },
+  "browserify": {
+    "transform": [
+      [
+        "babelify",
+        {
+          "presets": [
+            "es2015",
+            "react"
+          ]
+        }
+      ]
+    ]
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
+    "babelify": "^7.2.0",
+    "browserify": "^13.0.0",
+    "uglifyjs": "^2.4.10",
+    "watchify": "^3.7.0"
+  }
+}
