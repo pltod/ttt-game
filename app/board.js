@@ -22,33 +22,16 @@ var Board = React.createClass({
 
   getInitialState: function() {
     return {
-      cards: this.getInitialCards(),
-      turn: this.props.resetBoard ? true : this.player1Turn
+      needToReset: true,
+      player1Turn: true
     }
   },
 
-  getInitialCards: function () {
-    var cards = [];
-    var cardIndex;
-    if (this.props.resetBoard) {
-      this.player1Attempts = [];
-      this.player2Attempts = [];
-      this.player1Turn = true;
-      this.winnerExist = false;
-      for (var i = 0; i < boardCards; i++) {
-        cardIndex = i + 1;
-          cards.push(
-            <Card
-              key = {i}
-              isFlipped = {false}
-              cardIndex = {cardIndex}
-              callback = {this.handleCard} />
-          )
-      }
-      return cards;
-    } else {
-      return this.getCards();
-    }
+  reset: function () {
+    this.player1Attempts = [];
+    this.player2Attempts = [];
+    this.player1Turn = true;
+    this.winnerExist = false;
   },
 
   getCards: function() {
@@ -86,14 +69,6 @@ var Board = React.createClass({
 
     }
     return cards;
-  },
-
-  //Adds attempt to the list with current player's attempts
-  //Each attempt is marked with the card index
-  registerAttempt: function(cardIndex) {
-    this.player1Turn
-      ? this.player1Attempts.push(cardIndex)
-      : this.player2Attempts.push(cardIndex);
   },
 
   gameOver: function(cardIndex) {
@@ -134,13 +109,21 @@ var Board = React.createClass({
     })
   },
 
-  handleCard: function(card) {
-    this.registerAttempt(card.props.cardIndex);
-    this.setState({cards: this.getCards()})
-    this.checkGameStatus(card)
+  handleCard: function(cardIndex) {
+    this.registerAttempt(cardIndex);
+    this.checkGameStatus()
   },
 
-  checkGameStatus: function(card) {
+  //Adds attempt to the list with current player's attempts
+  //Each attempt is marked with the card index
+  registerAttempt: function(cardIndex) {
+    this.player1Turn
+      ? this.player1Attempts.push(cardIndex)
+      : this.player2Attempts.push(cardIndex);
+    this.setState({needToReset: false, player1Turn: !this.state.player1Turn})
+  },
+
+  checkGameStatus: function() {
     var winnerName;
     if (!this.gameOver()) {
       this.changeTurn();
@@ -155,8 +138,12 @@ var Board = React.createClass({
   },
 
   render() {
+    if (this.state.needToReset) {
+      this.reset();
+    }
+    var cards = this.getCards();
     var a1, a2;
-    if (this.state.turn) {
+    if (this.state.player1Turn) {
       a1 = <Avatar color={Colors.deepOrange300} backgroundColor={Colors.purple500}>P1</Avatar>;
       a2 = <Avatar>P2</Avatar>;
     } else {
@@ -169,9 +156,9 @@ var Board = React.createClass({
           <ListItem leftAvatar={a1}>{this.props.player1Name}</ListItem>
           <ListItem leftAvatar={a2}>{this.props.player2Name}</ListItem>
         </List>
-        <div>{this.state.cards.slice(0, 3)}</div>
-        <div>{this.state.cards.slice(3, 6)}</div>
-        <div>{this.state.cards.slice(6, 9)}</div>
+        <div>{cards.slice(0, 3)}</div>
+        <div>{cards.slice(3, 6)}</div>
+        <div>{cards.slice(6, 9)}</div>
       </div>
     );
   }

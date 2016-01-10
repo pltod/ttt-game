@@ -27,7 +27,7 @@ const cardBackStyle = {
 
 var Card = React.createClass({
   showBack() {
-    this.props.callback(this);
+    this.props.callback(this.props.cardIndex);
   },
 
   render() {
