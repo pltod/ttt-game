@@ -20,18 +20,18 @@ var Board = React.createClass({
 
   winnerExist: false,
 
-  getInitialState: function() {
-    return {
-      needToReset: true,
-      player1Turn: true
-    }
-  },
-
   reset: function () {
     this.player1Attempts = [];
     this.player2Attempts = [];
     this.player1Turn = true;
     this.winnerExist = false;
+  },
+
+  getInitialState: function() {
+    return {
+      needToReset: true,
+      player1Turn: true
+    }
   },
 
   getCards: function() {
@@ -46,7 +46,7 @@ var Board = React.createClass({
             flippedBy = "player1"
             isFlipped = {true}
             cardIndex = {cardIndex}
-            callback = {this.handleCard} />
+            callback = {this.handleCardFlip} />
         )
       } else if (this.player2Attempts.indexOf(cardIndex) !== -1) {
         cards.push(
@@ -55,7 +55,7 @@ var Board = React.createClass({
             flippedBy = "player2"
             isFlipped = {true}
             cardIndex = {cardIndex}
-            callback = {this.handleCard} />
+            callback = {this.handleCardFlip} />
         )
       } else {
         cards.push(
@@ -63,7 +63,7 @@ var Board = React.createClass({
             key = {i}
             isFlipped = {false}
             cardIndex = {cardIndex}
-            callback = {this.handleCard} />
+            callback = {this.handleCardFlip} />
         )
       }
 
@@ -71,19 +71,37 @@ var Board = React.createClass({
     return cards;
   },
 
+  handleCardFlip: function(cardIndex) {
+    this.registerAttempt(cardIndex);
+    this.checkGameStatus()
+  },
+
+  //Adds attempt to the list with current player's attempts
+  //Each attempt is marked with the card index
+  registerAttempt: function(cardIndex) {
+    this.player1Turn ? this.player1Attempts.push(cardIndex) : this.player2Attempts.push(cardIndex);
+    this.setState({needToReset: false, player1Turn: !this.state.player1Turn})
+  },
+
+  checkGameStatus: function() {
+    this.gameOver() ? this.props.sendGameInfo(this.getWinnerName()) : this.changeTurn();
+  },
+
+  getWinnerName: function () {
+    if (this.winnerExist) {
+      return (this.player1Turn) ? this.props.player1Name : this.props.player2Name
+    } else {
+      return "Draw";
+    }
+  },
+
   gameOver: function(cardIndex) {
-    var attemptsToCheck = this.player1Turn
-      ? this.player1Attempts
-      : this.player2Attempts;
+    var attemptsToCheck = this.player1Turn ? this.player1Attempts : this.player2Attempts;
     if (attemptsToCheck.length < 3) {
       return false;
     } else {
       this.winnerExist = this.hasWinner();
-      if (this.winnerExist || (attemptsToCheck.length > 4 && !this.winnerExist)) {
-        return true;
-      } else {
-        return false;
-      }
+      return (this.winnerExist || (attemptsToCheck.length > 4 && !this.winnerExist));
     }
   },
 
@@ -93,9 +111,7 @@ var Board = React.createClass({
 
   //Returns true if the user has all the indexes in its attempts
   combinationFound: function(winingCombination) {
-    var attempts = this.player1Turn
-      ? this.player1Attempts
-      : this.player2Attempts;
+    var attempts = this.player1Turn ? this.player1Attempts : this.player2Attempts;
     return !winingCombination.some(function(cardIndex) {
       return !(attempts.indexOf(cardIndex) !== -1);
     });
@@ -107,34 +123,6 @@ var Board = React.createClass({
     this.setState({
       turn: this.player1Turn
     })
-  },
-
-  handleCard: function(cardIndex) {
-    this.registerAttempt(cardIndex);
-    this.checkGameStatus()
-  },
-
-  //Adds attempt to the list with current player's attempts
-  //Each attempt is marked with the card index
-  registerAttempt: function(cardIndex) {
-    this.player1Turn
-      ? this.player1Attempts.push(cardIndex)
-      : this.player2Attempts.push(cardIndex);
-    this.setState({needToReset: false, player1Turn: !this.state.player1Turn})
-  },
-
-  checkGameStatus: function() {
-    var winnerName;
-    if (!this.gameOver()) {
-      this.changeTurn();
-    } else {
-      if (!this.winnerExist) {
-        winnerName = "Draw";
-      } else {
-        winnerName = (this.player1Turn) ? this.props.player1Name : this.props.player2Name
-      }
-      this.props.sendGameInfo(winnerName);
-    }
   },
 
   render() {
