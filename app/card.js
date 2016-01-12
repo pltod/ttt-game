@@ -6,7 +6,7 @@ import O from 'material-ui/lib/svg-icons/image/panorama-fish-eye';
 import Colors from 'material-ui/lib/styles/colors';
 import Paper from 'material-ui/lib/paper';
 
-const iconStyles = {
+const iconStyle = {
   width: "100px",
   height: "100px"
 };
@@ -35,8 +35,8 @@ var Card = React.createClass({
     var icon;
     if (this.props.isFlipped) {
       icon = (flippedBy === "player1")
-        ? <X style={iconStyles} color={Colors.white}/>
-        : <O style={iconStyles} color={Colors.white}/>
+        ? <X style={iconStyle} color={Colors.white}/>
+        : <O style={iconStyle} color={Colors.white}/>
     }
 
     return (
